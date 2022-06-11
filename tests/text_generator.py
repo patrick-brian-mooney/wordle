@@ -1,0 +1,1 @@
+/home/patrick/Documents/programming/python_projects/markov_sentence_generator/text_generator.py
