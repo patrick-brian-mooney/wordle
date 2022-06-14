@@ -203,7 +203,7 @@ def get_shard_data(shard_path: Path) -> typing.Dict[str, dict]:
     t_start = time.monotonic()
     with bz2.open(shard_path, mode='rb') as shard_file:
         unpacked_shard = pickle.load(shard_file)
-    print(f"    ... unpacked shard {shard_path.name}, containing {len(unpacked_shard)} items, in {time.monotonic() - t_start} seconds")
+    print(f"    ... unpacked analysis-data shard {shard_path.name}, containing {len(unpacked_shard)} items, in {time.monotonic() - t_start} seconds")
     t_after_unpacking = time.monotonic()
     for answer, data in unpacked_shard.items():
         ret[answer] = {
@@ -222,12 +222,16 @@ def get_shard_data(shard_path: Path) -> typing.Dict[str, dict]:
         }
 
     # Try to avoid letting huge shards collect in memory
-    del unpacked_shard
+    del unpacked_shard, answer, data
     gc.collect()
     print(f"      ... re-packed data in {time.monotonic() - t_after_unpacking} seconds")
 
     return ret
 
+
+@functools.lru_cache
+def sorted_wordle_words() -> typing.List[str]:
+    return sorted(wu.known_five_letter_words)
 
 @functools.lru_cache(maxsize=power_of_two_equal_to_or_greater_than(len(wu.known_five_letter_words)))
 def get_word_index(word: str) -> int:
@@ -236,7 +240,7 @@ def get_word_index(word: str) -> int:
     the range 0 <= pos < len(wu.known_five_letter_words).
     """
     assert word in wu.known_five_letter_words
-    return sorted(wu.known_five_letter_words).index(word)
+    return sorted_wordle_words().index(word)
 
 
 def summarize_analysis(strategy: strategies.Strategy) -> None:
@@ -253,25 +257,23 @@ def summarize_analysis(strategy: strategies.Strategy) -> None:
         'total errors': 0,
         'total moves': 0,
     }
-    solution_length_matrix = pd.DataFrame(np.empty((len(wu.known_five_letter_words), len(wu.known_five_letter_words)),
-                                                   dtype=np.float64),       # Need a float type to get real NaN values
-                                          index = sorted(wu.known_five_letter_words),
-                                          columns = sorted(wu.known_five_letter_words))
+    solution_length_matrix = np.empty((len(wu.known_five_letter_words), len(wu.known_five_letter_words)), dtype=np.float64)
     solution_length_matrix[:] = np.nan
 
     for current_shard_path in relevant_shards:
+        current_shard_start = time.monotonic()
         current_shard = get_shard_data(current_shard_path)
         output['total errors'] += sum([i['number of errors'] for i in current_shard.values()])
         output['total moves'] += sum([sum([len(m) for m in sol['solutions'].values()]) for sol in current_shard.values()])
         for answer in current_shard:
             for first_guess in current_shard[answer]['solutions']:
                 if current_shard[answer]['solutions'][first_guess][-1]['solved']:
-                    # Indexing a Pandas DataFrame is, counterintuitively perhaps, ['column']['row'], not the reverse.
-                    # Columns are initial guesses, rows are the solution to a set.
-                    # So the number at ['agape']['liver'] is the number of moves it took to get to 'liver', starting at 'agape'.
-                    solution_length_matrix[first_guess][answer_name_from_key(answer)] = len(current_shard[answer]['solutions'][first_guess])
+                    solution_length_matrix[get_word_index(answer_name_from_key(answer))][get_word_index(first_guess)] = len(current_shard[answer]['solutions'][first_guess])
+            gc.collect()
+        print(f"        ... processed entire shard in {time.monotonic() - current_shard_start} seconds")
     print(f"  ... unpacked and summarized all shards in {time.monotonic() - t_begin_whole_process} seconds!")
 
+    solution_length_matrix = pd.DataFrame(solution_length_matrix, columns=sorted_wordle_words(), index=sorted_wordle_words())
     solution_matrix_filename = solutions_cache / f"{strategy.__name__}_solution_matrix.csv.bz2"
     print(f"  ... saving solution length matrix {solution_matrix_filename} ...")
     solution_length_matrix.to_csv(solution_matrix_filename, na_rep='NULL')
@@ -342,7 +344,7 @@ def exhaustively_analyze() -> None:
         print(f"\nNow trying strategy {strat.__name__}")
 
         shard_number, output, save_thread = 0, dict(), None     # Basic parameters controlling how sharded data is saved.
-        for (i, solution) in enumerate(sorted(wu.known_five_letter_words), 1):
+        for (i, solution) in enumerate(sorted_wordle_words(), 1):
             if (i <= (len(already_done) * max_entries_in_shard)):
                 shard_number = len(already_done)
                 continue        # If we're resuming a previous run, skip the starting points we've already analyzed.
@@ -361,6 +363,8 @@ def exhaustively_analyze() -> None:
                 shard_number += 1
         if save_thread:
             save_thread.join()
+        del output
+        gc.collect()
         summarize_analysis(strat)
 
 if __name__ == "__main__":
