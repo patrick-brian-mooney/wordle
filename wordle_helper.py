@@ -36,9 +36,9 @@ import string
 import sys
 
 try:
-    import pyximport; pyximport.install()
-except (ImportError,):                          # Allow calling from setups that don't have Cython installed ...
-    pass                                        # ... by falling back on .py -> .pyx symlinks, if present.
+    import pyximport; pyximport.install()       # http://cython.org
+except (ImportError,):                          # Allow running from setups that don't have Cython installed ...
+    pass                                        # ... by renaming *.pyx files to *.py
 
 import wordle_utils as wu
 

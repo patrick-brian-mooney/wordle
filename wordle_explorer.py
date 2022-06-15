@@ -32,7 +32,11 @@ from pathlib import Path
 
 import numpy as np                              # https://numpy.org/
 import pandas as pd                             # https://pandas.pydata.org/
-import pyximport; pyximport.install()           # http://cython.org
+
+try:
+    import pyximport; pyximport.install()       # http://cython.org
+except ImportError:
+    pass        # Allow running without installing Cython by renaming files from *.pyx to *py.
 
 import wordle_utils as wu
 import strategies
