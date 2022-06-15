@@ -17,27 +17,22 @@ file LICENSE.md for details.
 """
 
 
-import abc
 import bz2
-import collections
 import functools
 import gc
-import heapq
 import json
 import math
-import numpy as np
 import numbers
 import pickle
-import reprlib
-import statistics
 import time
 import threading
 import typing
 
 from pathlib import Path
 
-import pandas as pd
-import pyximport; pyximport.install()       # http://cython.org
+import numpy as np                              # https://numpy.org/
+import pandas as pd                             # https://pandas.pydata.org/
+import pyximport; pyximport.install()           # http://cython.org
 
 import wordle_utils as wu
 import strategies
@@ -47,105 +42,16 @@ solutions_cache = Path(__file__).parent / 'solutions'
 max_entries_in_shard = 25
 
 
-class FairLimitedHeap(collections.abc.Iterable):
-    """A heap implemented using the heapq module that has a limited size. The size
-    limit is a "soft" or "fair" limit: it tries to keep SOFT_LIMIT items (if at
-    least that many items have been added to the heap in the first place), but will
-    keep more if the worst-scored items all score equally poorly. So, for instance,
-    pushing a single new item onto a heap that has exactly SOFT_LIMIT items will not
-    delete a single item from the bottom of the heap if multiple items at the bottom
-    of the heap all have the same low score.
-
-    For instance, if there is a heap of 100 items, and the soft limit is 100, and
-    the four lowest-ranked items all have the same low score, then:
-
-    * Pushing an item scoring above that low score will increase the size of the
-      heap to 101, because none of the items with the low score has a score any
-      lower than any of the others, so none of them is removed; and
-    * pushing another item scoring above that low score will increase the size of
-      the heap to 102, for that same reason; same with pushing another item with a
-      score above that low score, which will increase the heap size to 103; and
-    * pushing a fourth item above that low score will add the item to the heap,
-      temporarily increasing the size of the heap to 104 before removing all four of
-      the equally low-scoring items and taking the heap size down to 100.
-
-    The score of items must be manually specified when adding an item to the heap.
-    Items added to the heap must be orderable for this to work. Internally, the heap
-    is a list of (score, item) tuples, and rely on Python's short-circuiting of
-    tuple comparisons to keep the heap sorted. (The fact that items with identical
-    scores will be ordered based on the ordering of the items being stored both
-    implies that the heap does not preserve insertion order for same-scored items
-    and is the reason why items scored must be orderable.)
+class NonNanFairLimitedHeap(wu.FairLimitedHeap):
+    """Just Like FairLimitedHeap, except that it silently declines to push items
+    onto the heap if the vlue assoociated with the item is a NaN value.
     """
-    def __init__(self, soft_limit: int = 100,
-                 initial: typing.Iterable = ()) -> None:
-        """If INITIAL is specified, it must be an iterable of (value, item) tuples.
-        """
-        if initial:
-            for item, _ in initial:
-                assert isinstance(item, numbers.Number)
-        self._soft_limit = soft_limit
-        self._data = [][:]
-        for item, value in initial:
-            self.push(value, item)
-
-    def __str__(self) -> str:
-        return f"< {self.__class__.__name__} object, with {len(self._data)} items having priorities from {self._data[0][0]} to {self._data[-1][0]} >"
-
-    def __repr__(self) -> str:
-        """Limit how many items are displayed in the __repr__ by using reprlib.
-        """
-        return f"{self.__class__.__name__} ({reprlib.repr(self._data)})"
-
-    def __eq__(self, other) -> bool:
-        if type(self) != type(other):
-            return False
-        return self._data == other._data
-
-    def __bool__(self) -> bool:
-        return bool(self._data)
-
-    def __iter__(self) -> typing.Iterator:
-        return iter(self._data)
-
-    def __len__(self) -> int:
-        return len(self._data)
-
-    def __getitem__(self, item) -> typing.Any:
-        return self._data[item][1]               # return only the item's VALUE, not its SCORE.
-
     def push(self, item: typing.Any,
-              value: numbers.Number) -> None:
-        heapq.heappush(self._data, (value, item))
-        if len(self._data) <= self._soft_limit:
+             value: numbers.Number) -> None:
+        if np.isnan(value):
             return
-
-        # Find the index of the item after last item in the heap with same VALUE as the item at the low end of the heap
-        for index, item in enumerate(self._data):
-            if index == 0:
-                comp_value = item[0]
-            elif item[0] != comp_value:     # exact equality good enough, even if difference is tiny.
-                break
-
-        if (len(self._data) - index) >= self._soft_limit:
-             for i in range(index):
-                 heapq.heappop(self._data)
-
-    def pop(self, also_return_score: bool = False) -> typing.Any:
-        if also_return_score:
-            return heapq.heappop(self._data)
         else:
-            return heapq.heappop(self._data[1])
-
-    def as_sorted_list(self, include_values: bool = False) -> typing.List[typing.Tuple[numbers.Number, typing.Any]]:
-        """Returns the contents of the heap in sorted-by-priority order. If
-        INCLUDE_VALUES is True (not the default), returns a set of (value, item)
-        tuples instead of just the items.
-        """
-        if include_values:
-            return sorted(self._data)
-        else:
-            return [i[1] for i in sorted(self._data)]
+            wu.FairLimitedHeap.push(self, item, value)
 
 
 def key_name(strategy: str, answer: str) -> str:
@@ -233,6 +139,7 @@ def get_shard_data(shard_path: Path) -> typing.Dict[str, dict]:
 def sorted_wordle_words() -> typing.List[str]:
     return sorted(wu.known_five_letter_words)
 
+
 @functools.lru_cache(maxsize=power_of_two_equal_to_or_greater_than(len(wu.known_five_letter_words)))
 def get_word_index(word: str) -> int:
     """Given WORD, a word in the list of known five-letter words that are Wordle
@@ -263,7 +170,7 @@ def summarize_analysis(strategy: strategies.Strategy) -> None:
     for current_shard_path in relevant_shards:
         current_shard_start = time.monotonic()
         current_shard = get_shard_data(current_shard_path)
-        output['total errors'] += sum([i['number of errors'] for i in current_shard.values()])
+        output['total errors'] += sum([i['number of errors'] for i in current_shard.values() if isinstance(i['number of errors'], numbers.Number)])
         output['total moves'] += sum([sum([len(m) for m in sol['solutions'].values()]) for sol in current_shard.values()])
         for answer in current_shard:
             for first_guess in current_shard[answer]['solutions']:
@@ -286,7 +193,7 @@ def summarize_analysis(strategy: strategies.Strategy) -> None:
 
     # All right, now compute the best and worst starting guesses, overall. Starting guesses are in columns.
     # "Worst" guesses are computed with an arithmetic inverse of the average score because the heap keeps "high" values.
-    worst_initial_guesses, best_initial_guesses = FairLimitedHeap(100), FairLimitedHeap(100)
+    worst_initial_guesses, best_initial_guesses = NonNanFairLimitedHeap(100), NonNanFairLimitedHeap(100)
     non_solutions = list()
 
     for col in solution_length_matrix:

@@ -30,7 +30,7 @@ class Strategy:
     Strategies are "degenerate" classes -- mere packages of functions. They need not
     even be instantiated to do their work: none of their methods takes a SELF
     parameter! (All their methods are static or class methods.) They are mini-
-    modules that keep their related functions in packages, nothing else. All that
+    modules that keep their related functions in bundles, nothing more. All that
     instantiating them achieves is checking that all of a Strategy's abstract
     methods have been filled in.
 
@@ -40,8 +40,9 @@ class Strategy:
     whatsoever to instantiating a Strategy! It's just a package of functions that
     benefits from inheritance to facilitate decomposition.)
     """
-    is_abstract = True      # Can't use @abstractmethod or metaclass=abc.ABC when compiling with Cython and also using classmethods
-                            # must be manually and properly set on subclasses: if this is True, the Stategy won't be tried, because it's an abstract superclass
+    is_abstract = True      # Can't use @abstractmethod or metaclass=abc.ABC when compiling with Cython and also using
+                            # @classmethod. This must be manually and properly set on subclasses: if this is True, the
+                            # Stategy is taken to be an abstract superclass, and it won't be tried.
 
     @classmethod
     def all_strategies(cls) -> typing.Generator[type, None, None]:
@@ -68,6 +69,7 @@ class Strategy:
         rankings compare to the rankings of other Strategies; that comparison is never
         made.
         """
+        raise NotImplementedError
 
     @classmethod
     def solve(cls, answer: str) -> typing.Dict:          #FIXME! More specific return type.
@@ -92,38 +94,48 @@ class Strategy:
 
     @classmethod
     def solve_from(cls, answer: str,
-                   start_from: str,
+                   start_from: typing.Union[str, None],
                    moves_made: typing.Optional[typing.List[typing.Dict]] = None,
                    discovered_but_unknown_pos: typing.Optional[str] = None,
+                   constraints: typing.Optional[typing.Dict[int, str]] = None,
                    ) -> typing.Union[None, typing.Tuple[wu.SolutionData]]:
         """Given ANSWER, the answer to the Wordle, derive it from START_FROM using the
         current Strategy, tracking moves made and how that changes the parameters of
         what answers are remaining.
 
+        START_FROM may be None to force the inidividual Strategy to choose its own
+        starting move. This really only makes sense of the "starting move" is a "next
+        move" because a subclass has already made some choices and is delegating the
+        rest of the choices to a superclass. This happens, for instance, with
+        descendants of SpecifyInitialGuessesMixIn.
+
         Subclasses may refuse to analyze for certain sets of parameters and return None
         instead of returning an appropriate analysis dictionary.
         """
-
-        possibilities = {i: set(string.ascii_lowercase) for i in range(1, 6)}
+        possibilities = constraints or {i: set(string.ascii_lowercase) for i in range(1, 6)}
         ret, done = moves_made or list(), False
         guess, unknown_pos = start_from, discovered_but_unknown_pos or ''
 
         while not done:
-            done, new_unknown_pos, new_possibilities = wu.evaluate_guess(guess, answer, possibilities, unknown_pos)
+            if guess:
+                done, new_unknown_pos, new_possibilities = wu.evaluate_guess(guess, answer, possibilities, unknown_pos)
+            else:
+                new_unknown_pos, new_possibilities = unknown_pos, possibilities
             untried_letters = ''.join([c for c in string.ascii_lowercase if c not in ''.join(i.Move for i in ret)])
             letter_frequencies, remaining_possibilities = wu.enumerate_solutions(new_possibilities, new_unknown_pos)
             possible_answers = {sol: cls.score(letter_frequencies, untried_letters, sol) for sol in remaining_possibilities}
             possible_answers = dict(sorted(possible_answers.items(), key=lambda kv: kv[1], reverse=True))
-            if len(ret) > 5:
-                done = True
-            ret.append(wu.SolutionData(Move=guess,
-                                       InitialPossibleLetters=tuple((key, value) for key, value in possibilities.items()),
-                                       KnownLettersWithUnknownPositionBeforeGuess=unknown_pos,
-                                       PossibleLettersAfterGuess=tuple((key, value) for key, value in new_possibilities.items()),
-                                       KnownLettersWithUnknownPositionAfterGuess=new_unknown_pos,
-                                       RemainingPossibilities=len(possible_answers),
-                                       ExhaustedErroneously=any([not len(v) for v in possibilities.values()]),
-                                       Solved=done))
+            if guess:
+                if len(ret) > 5:
+                    done = True
+                ret.append(wu.SolutionData(Move=guess,
+                                           InitialPossibleLetters=tuple((key, value) for key, value in possibilities.items()),
+                                           KnownLettersWithUnknownPositionBeforeGuess=unknown_pos,
+                                           PossibleLettersAfterGuess=tuple((key, value) for key, value in new_possibilities.items()),
+                                           KnownLettersWithUnknownPositionAfterGuess=new_unknown_pos,
+                                           RemainingPossibilities=len(possible_answers),
+                                           ExhaustedErroneously=any([not len(v) for v in possibilities.values()]),
+                                           Solved=done))
             if not done:
                 guess = list(possible_answers.keys())[0]
                 possibilities, unknown_pos = new_possibilities, new_unknown_pos
@@ -164,7 +176,7 @@ class RandomChoiceOnEachTurn(Strategy):
 class SpecifyInitialGuessesMixIn(Strategy):
     """A Strategy that tries a specific series of initial guesses before falling back
     on its (other) parent Strategy from there. The set of initial tries is specified
-    as the class attribute __INITIAL_TRIES, which needs to be overridden in a
+    as the class attribute _INITIAL_TRIES, which needs to be overridden in a
     subclass. If it isn't, the derived Strategy just immediately falls back on its other
     superclass.
 
@@ -181,14 +193,17 @@ class SpecifyInitialGuessesMixIn(Strategy):
         Can be overridden by subclasses to choose a different class to delegate to.
         """
         assert len(cls.__bases__) > 1   # This is a mix-in class only!
+        assert (cls.__bases__[0] == SpecifyInitialGuessesMixIn) or issubclass(cls.__bases__[0], SpecifyInitialGuessesMixIn)
         for c in cls.__bases__:         # This would fail if we were going all the way up the __mro__, but we're not.
             assert issubclass(c, Strategy)
-        assert (cls.__bases__[0] == SpecifyInitialGuessesMixIn) or issubclass(cls.__bases__[0], SpecifyInitialGuessesMixIn)
+        assert len([c for c in cls.__bases__ if (not issubclass(c, SpecifyInitialGuessesMixIn) and (not c == SpecifyInitialGuessesMixIn))]) > 0
         return [c for c in cls.__bases__ if (not issubclass(c, SpecifyInitialGuessesMixIn) and (not c == SpecifyInitialGuessesMixIn))][0]
 
     @classmethod
     def _abort_early(cls, moves: typing.List[dict],
-                     known_letters_with_unknown_pos: str) -> bool:
+                     known_letters_with_unknown_pos: str,
+                     possibilities: typing.Iterable[str],
+                     ) -> bool:
         """Decide whether to abort before all initial guesses have been tried, even if
         a solution hasn't been found. By default, in this class, this never ever
         happens; but this can be changed by subclassing.
@@ -197,21 +212,27 @@ class SpecifyInitialGuessesMixIn(Strategy):
 
     @classmethod
     def solve_from(cls, answer: str,
-                   start_from: str,
+                   start_from: typing.Union[str, None],
                    moves_made: typing.Optional[typing.List[typing.Dict]] = None,
                    discovered_but_unknown_pos: typing.Optional[str] = None,
+                   constraints: typing.Optional[typing.Dict[int, str]] = None,
                    ) -> typing.Union[None, typing.Tuple[wu.SolutionData]]:
         """Given ANSWER, the answer to the Wordle, derive it from START_FROM using the
         current Strategy, tracking moves made and how that changes the parameters of
         what answers are remaining.
 
+        START_FROM should not be None, but the possibility needs to be written into the
+        meathod header because Cython requires that descendant classes have the same
+        method headers as the headers for the methods they're overriding.
+
         If __INITIAL_GUESSES are specified (by subclassing) and START_FROM is not
         the correct starting word, returns None instead of analyzing.
         """
+        assert start_from is not None
         if cls._initial_tries and (cls._initial_tries[0] != start_from):
             return None
 
-        possibilities = {i: set(string.ascii_lowercase) for i in range(1, 6)}
+        possibilities = constraints or {i: set(string.ascii_lowercase) for i in range(1, 6)}
         ret, done = moves_made or list(), False
         guesses = list(cls._initial_tries)
         guess, unknown_pos = start_from, discovered_but_unknown_pos or ''
@@ -219,9 +240,7 @@ class SpecifyInitialGuessesMixIn(Strategy):
         while guesses and not done:
             guess = guesses.pop(0)
             if not guesses:
-                class_to_delegate = cls._delegation_class()
-                ret = class_to_delegate.solve_from(answer, guess, ret, unknown_pos)
-                return tuple(ret)
+                return tuple(cls._delegation_class().solve_from(answer, guess, ret, unknown_pos))
             done, new_unknown_pos, new_possibilities = wu.evaluate_guess(guess, answer, possibilities, unknown_pos)
             untried_letters = ''.join([c for c in string.ascii_lowercase if c not in ''.join(i.Move for i in ret)])
             letter_frequencies, remaining_possibilities = wu.enumerate_solutions(new_possibilities, new_unknown_pos)
@@ -239,10 +258,10 @@ class SpecifyInitialGuessesMixIn(Strategy):
                                        Solved=done))
             if not done:
                 possibilities, unknown_pos = new_possibilities, new_unknown_pos
-            if (len(ret) < len(cls._initial_tries)) and cls._abort_early(ret, unknown_pos):
+            if (len(ret) < len(cls._initial_tries)) and cls._abort_early(ret, unknown_pos, remaining_possibilities):
                 # Wait a minute: what should we do when this happens?
                 # Answer: restructure code above to guess earlier, once we have a Strategy that requires it.
-                guesses = list()    # Don't bother checking aborting early if we're done with these words anyway
+                return tuple(cls._delegation_class().solve_from(answer, None, ret, unknown_pos, possibilities))
 
 
 class ShadePointCurlyMixIn(SpecifyInitialGuessesMixIn):
@@ -267,4 +286,202 @@ class ShadePointCurlyThenGetMaximumInfoHardMode(ShadePointCurlyMixIn, GetMaximum
     GetMaximumInfoHardMode for the rest of its guesses. This is not quite what Frias
     suggests, but it's not all that far off, either.
     """
+    is_abstract = False
+
+
+class BailEarlyByPercentageReductionMixIn(SpecifyInitialGuessesMixIn):
+    """A mix-in Strategy to be used in combination with subclasses of
+    SpecifyInitialGuessesMixIn. It bails early on using the initial guesses if the
+    number of remaining possibilities is sufficiently reduced to make it worthwhile
+    to just move along to the other parent strategy. "Sufficiently" is specified as
+    a percentage reduction relative to the number of total possibilities that each
+    strategy begins with. Without this, a SpecifyInitialGuessesMixIn descendant will
+    mechanically go through all of its initial guesses, stopping only if one of
+    those guesses happens to be the answer.
+    """
     is_abstract = True
+    reduction_needed_to_abort = None
+
+    @classmethod
+    def _abort_early(cls, moves: typing.List[dict],
+                     known_letters_with_unknown_pos: str,
+                     possibilities: typing.Iterable[str],  # FIXME: More specific annotation
+                     ) -> bool:
+        assert cls.reduction_needed_to_abort is not None, f"ERROR! Strategy {cls.__name__} does not specify the amount of space reduction needed to abort trying a specified list of initial guesses early!"
+        assert 0 <= cls.reduction_needed_to_abort <= 1, f"ERROR! Strategy {cls.__name__} has a reduction_needed_to_bort value that is not between zero and 1!"
+        return (len(possibilities) < ((1.0 - cls.reduction_needed_to_abort) * len(wu.known_five_letter_words)))
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly01(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .01
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly02(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .02
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly03(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .03
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly04(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .04
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly05(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .05
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly06(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .06
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly07(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .07
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly08(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .08
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly09(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .09
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly10(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .10
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly15(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .15
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly20(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .20
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly25(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .25
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly30(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .30
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly35(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .35
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly40(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .40
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly45(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .45
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly50(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .50
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly55(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .55
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly60(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .60
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly65(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .65
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly70(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .70
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly75(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .75
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly80(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .80
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly85(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .85
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly90(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .90
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly91(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .91
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly92(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .92
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly93(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .93
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly94(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .94
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly95(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .95
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly96(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .96
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly97(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .97
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly98(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .98
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly99(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .99
