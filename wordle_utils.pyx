@@ -270,6 +270,9 @@ class FairLimitedHeap(collections.abc.Iterable):
     def __getitem__(self, item) -> typing.Any:
         return self._data[item][1]               # return only the item's VALUE, not its SCORE.
 
+    def __setitem__(self, key, newvalue):
+        raise TypeError(f"Cannot directly set individual items in a {self.__class__.__name__}! Use .push() to add a value to the heap instead.")
+
     def push(self, item: typing.Any,
               value: numbers.Number) -> None:
         heapq.heappush(self._data, (value, item))
