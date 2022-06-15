@@ -485,3 +485,48 @@ class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly98(BailEarlyByPercent
 class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly99(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
     is_abstract = False
     reduction_needed_to_abort = .99
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly991(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .991
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly992(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .992
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly993(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .993
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly994(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .994
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly995(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .995
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly996(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .996
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly997(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .997
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly998(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .998
+
+
+class ShadePointCurlyThenGetMaximumInfoHardModeAndBailEarly999(BailEarlyByPercentageReductionMixIn, ShadePointCurlyMixIn, GetMaximumInfoHardMode):
+    is_abstract = False
+    reduction_needed_to_abort = .999
