@@ -30,7 +30,7 @@ This file is designed to be compiled with [Cython](http://cython.org), but you c
 
 
 
-These scripts are copyright © 2022 by Patrick Mooney. They are licensed under the GPL v3 or, at your option, any
+These scripts are copyright © 2022-24 by Patrick Mooney. They are licensed under the GPL v3 or, at your option, any
 later version. See the file LICENSE.md for a copy of this licence. No warranty or guarantee of functionality is
 represented here, though I'm glad if these scripts are helpful to you and would love to hear if you have thoughts or
 feedback.

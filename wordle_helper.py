@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/home/patrick/Documents/programming/python_projects/wordle/bin/python
 # -*- coding: utf-8 -*-
 """A helper for guessing Wordle entries based on already known information. It
 prompts the user for already-known information and then prints a list of known
@@ -31,6 +31,7 @@ file LICENSE.md for details.
 """
 
 
+import argparse
 import typing
 import string
 import sys
@@ -87,6 +88,29 @@ def prompt_and_solve() -> typing.Tuple[str, str, typing.List[str]]:
 
 
 if __name__ == "__main__":
+    print('\n\nWordle Helper Utils, by Patrick Mooney. Use -h or --help for help.\n')
+    parser = argparse.ArgumentParser(prog='Wordle Helper',
+        description="A set of utilities for use with Parick Mooney's Wordle Helper script",
+        epilog='Released under the GNU GPL, either version 3 or (at your option) any later version. See the file'
+               'LICENSE.md for details.')
+    parser.add_argument('--eliminate-word', '--elim', '-e', action='append')
+    args = vars(parser.parse_args())
+
+    if ('eliminate_word' in args) and (args['eliminate_word']):
+        num_added = 0
+        start_len = len(wu.non_words)
+        for word in [w.strip().casefold() for w in args['eliminate_word']]:
+            if len(word) == 5:
+                wu.non_words.append(word)
+                print(f"Added {word.upper()} to list of non-words!")
+                num_added += 1
+        if num_added:
+            wu.non_words = sorted(set(wu.non_words))
+            wu.non_words_file.write_text('\n'.join(wu.non_words), encoding='utf-8')
+            print('    ... updated list of non-words on disk!')
+            print(f"    ... list of non-words now has {len(wu.non_words)} entries!")
+            sys.exit(0)
+
     known_letters, untried_letters, letter_frequencies, possible_answers = prompt_and_solve()
     print("Possible answers:")
 

@@ -25,13 +25,18 @@ import unicodedata
 from pathlib import Path
 
 
-# word_list_file = Path('/home/patrick/Documents/programming/resources/word-lists/dwyl/words_alpha.txt')
-word_list_file = Path('/home/patrick/Documents/programming/resources/word-lists/wordle.list')
+# word_list_file = Path('/home/patrick/Documents/programming/resources/word-lists/wordle.list')
+word_list_file = Path('/home/patrick/Documents/programming/resources/word-lists/dwyl/words_alpha.txt')
+non_words_file = Path('non-words.txt')  # List of words from the large word list we want to exclude from consideration.
 
+if not non_words_file.exists():
+    non_words_file.write_text("", encoding='utf-8')
+non_words = [w.strip().casefold() for w in non_words_file.read_text(encoding='utf-8').split('\n')]
 
-word_list_text = word_list_file.read_text()
-known_english_words = [w.strip() for w in word_list_text.split('\n') if w.strip()]
-known_five_letter_words = {w for w in known_english_words if len(w) == 5}
+word_list_text = word_list_file.read_text(encoding='utf-8')
+known_english_words = [w.strip().casefold() for w in word_list_text.split('\n') if w.strip()]
+known_five_letter_words = {w for w in known_english_words if ((len(w) == 5) and (w not in non_words))}
+word_list_text = '\n'.join(sorted(known_five_letter_words))     # these are the only words we're ever interested in
 
 
 SolutionData = collections.namedtuple('SolutionData', ('Move',
@@ -69,7 +74,6 @@ def positional_population_counts(words: typing.Iterable[str]) -> typing.Dict[int
     """
     for i in words: assert len(i) == 5
     return {i+1: collections.Counter([w[i] for w in words]) for i in range(5)}
-
 
 
 # Two functions that are used to help evaluate criteria picked out by Javier Frias as part of his evaluative criteria.
@@ -110,7 +114,7 @@ def word_weight(word: str,
     for c in word: assert c in string.ascii_lowercase
 
 
-# Functions that are used directly by other code to help amanage the changing set of parameters as guesses are tried by
+# Functions that are used directly by other code to help manage the changing set of parameters as guesses are tried by
 # various strategies.
 def enumerate_solutions(possible: typing.Dict[int, str],
                         ambiguous_pos: str) -> typing.Tuple[collections.Counter, typing.Set[str]]:
