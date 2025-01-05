@@ -28,14 +28,18 @@ from pathlib import Path
 # word_list_file = Path('/home/patrick/Documents/programming/resources/word-lists/wordle.list')
 word_list_file = Path('/home/patrick/Documents/programming/resources/word-lists/dwyl/words_alpha.txt')
 non_words_file = Path('non-words.txt')  # List of words from the large word list we want to exclude from consideration.
+addl_words_file = Path('addl-words.txt')    # Words added manually, in addition to the main word list.
 
 if not non_words_file.exists():
     non_words_file.write_text("", encoding='utf-8')
-non_words = [w.strip().casefold() for w in non_words_file.read_text(encoding='utf-8').split('\n')]
+if not addl_words_file.exists():
+    addl_words_file.write_text("", encoding='utf-8')
 
-word_list_text = word_list_file.read_text(encoding='utf-8')
-known_english_words = [w.strip().casefold() for w in word_list_text.split('\n') if w.strip()]
-known_five_letter_words = {w for w in known_english_words if ((len(w) == 5) and (w not in non_words))}
+non_words = [w.strip().casefold() for w in non_words_file.read_text(encoding='utf-8').split('\n')]
+addl_words = [w.strip().casefold() for w in addl_words_file.read_text(encoding='utf-8').split('\n') if w.strip()]
+
+main_english_words = [w.strip().casefold() for w in word_list_file.read_text(encoding='utf-8').split('\n') if w.strip()]
+known_five_letter_words = {w for w in (main_english_words + addl_words) if ((len(w) == 5) and (w not in non_words))}
 word_list_text = '\n'.join(sorted(known_five_letter_words))     # these are the only words we're ever interested in
 
 
