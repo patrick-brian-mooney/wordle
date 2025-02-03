@@ -94,6 +94,7 @@ if __name__ == "__main__":
         epilog='Released under the GNU GPL, either version 3 or (at your option) any later version. See the file'
                'LICENSE.md for details.')
     parser.add_argument('--eliminate-word', '--elim', '-e', action='append')
+    parser.add_argument('--confirm-word', '--confirm', '-c', action='append')
     parser.add_argument('--add-word', '--add', '-a', action='append')
     args = vars(parser.parse_args())
 
@@ -110,8 +111,6 @@ if __name__ == "__main__":
             wu.non_words_file.write_text('\n'.join(wu.non_words), encoding='utf-8')
             print('    ... updated list of non-words on disk!')
             print(f"    ... list of non-words now has {len(wu.non_words)} entries!")
-            if not (('add_word' in args) and (args['add_word'])):   # quit, unless we're also adding words
-                sys.exit(0)
 
     if ('add_word' in args) and (args['add_word']):
         num_added = 0
@@ -124,15 +123,37 @@ if __name__ == "__main__":
         if num_added:
             wu.addl_words = sorted(set(wu.addl_words))
             wu.addl_words_file.write_text('\n'.join(wu.addl_words), encoding='utf-8')
-            print('    ... update list of additional words on disk!')
+            print('    ... updated list of additional words on disk!')
             (print(f"    ... list of additional words now has {len(wu.addl_words)} entries!"))
-            sys.exit(0)
+
+    if ('confirm_word' in args) and (args['confirm_word']):
+        num_confirmed = 0
+        start_len = len(wu.conf_words)
+        for word in [w.strip().casefold() for w in args['confirm_word']]:
+            if len(word) == 5:
+                wu.conf_words.append(word)
+                print(f"Added {word.upper()} to list of confirmed words!")
+                num_added += 1
+        if num_added:
+            wu.conf_words = sorted(set(wu.conf_words))
+            wu.conf_words_file.write_text('\n'.join(wu.conf_words), encoding='utf-8')
+            print('    ... updated list of confirmed words on disk!')
+            print(f"    ... list of confirmed words now has {len(wu.conf_words)} entries!")
+
+    # If we performed one or more maintenance tasks, quit without running the main script
+    if (('add_word' in args) and (args['add_word'])) or \
+        (('eliminate_word' in args) and (args['eliminate_word'])) or \
+        (('confirm_word' in args) and (args['confirm_word'])):
+        sys.exit(0)
 
     known_letters, untried_letters, letter_frequencies, possible_answers = prompt_and_solve()
     print("Possible answers:")
 
     if possible_answers:
         for w in wu.ranked_answers(possible_answers, letter_frequencies, untried_letters):
-            print(w)
+            if w.strip().casefold() in wu.conf_words:
+                print(w.upper())
+            else:
+                print(w)
     else:
         print("No possibilities found!")
