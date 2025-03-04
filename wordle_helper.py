@@ -91,22 +91,25 @@ if __name__ == "__main__":
     print('\n\nWordle Helper Utils, by Patrick Mooney. Use -h or --help for help.\n')
     parser = argparse.ArgumentParser(prog='Wordle Helper',
         description="A set of utilities for use with Parick Mooney's Wordle Helper script",
-        epilog='Released under the GNU GPL, either version 3 or (at your option) any later version. See the file'
+        epilog='Released under the GNU GPL, either version 3 or (at your option) any later version. See the file '
                'LICENSE.md for details.')
-    parser.add_argument('--eliminate-word', '--elim', '-e', action='append')
-    parser.add_argument('--confirm-word', '--confirm', '-c', action='append')
-    parser.add_argument('--add-word', '--add', '-a', action='append')
+    parser.add_argument('--eliminate-word', '--elim', '-e', action='append',
+                        help="A word to eliminate from the list of potential words to consider.")
+    parser.add_argument('--confirm-word', '--confirm', '--conf', '-c', action='append',
+                        help="A word to be marked in output as having been confirmed to exist as a potential answer.")
+    parser.add_argument('--add-word', '--add', '-a', action='append',
+                        help="A word to add to the list of potential words to consider.")
     args = vars(parser.parse_args())
 
     if ('eliminate_word' in args) and (args['eliminate_word']):
-        num_added = 0
+        num_removed = 0
         start_len = len(wu.non_words)
         for word in [w.strip().casefold() for w in args['eliminate_word']]:
             if len(word) == 5:
                 wu.non_words.append(word)
                 print(f"Added {word.upper()} to list of non-words!")
-                num_added += 1
-        if num_added:
+                num_removed += 1
+        if num_removed:
             wu.non_words = sorted(set(wu.non_words))
             wu.non_words_file.write_text('\n'.join(wu.non_words), encoding='utf-8')
             print('    ... updated list of non-words on disk!')
@@ -133,8 +136,8 @@ if __name__ == "__main__":
             if len(word) == 5:
                 wu.conf_words.append(word)
                 print(f"Added {word.upper()} to list of confirmed words!")
-                num_added += 1
-        if num_added:
+                num_confirmed += 1
+        if num_confirmed:
             wu.conf_words = sorted(set(wu.conf_words))
             wu.conf_words_file.write_text('\n'.join(wu.conf_words), encoding='utf-8')
             print('    ... updated list of confirmed words on disk!')
