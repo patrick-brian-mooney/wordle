@@ -101,6 +101,8 @@ if __name__ == "__main__":
                         help="A word to add to the list of potential words to consider.")
     args = vars(parser.parse_args())
 
+    changes = False     # set to True if we make any changes to word lists.
+
     if ('eliminate_word' in args) and (args['eliminate_word']):
         num_removed = 0
         start_len = len(wu.non_words)
@@ -109,7 +111,19 @@ if __name__ == "__main__":
                 wu.non_words.append(word)
                 print(f"Added {word.upper()} to list of non-words!")
                 num_removed += 1
+
+                try:
+                    wu.addl_words.remove(word)
+                except ValueError:
+                    pass
+
+                try:
+                    wu.conf_words.remove(word)
+                except ValueError:
+                    pass
+
         if num_removed:
+            changes = True
             wu.non_words = sorted(set(wu.non_words))
             wu.non_words_file.write_text('\n'.join(wu.non_words), encoding='utf-8')
             print('    ... updated list of non-words on disk!')
@@ -123,7 +137,14 @@ if __name__ == "__main__":
                 wu.addl_words.append(word)
                 print(f"Added {word.upper()} to list of additional words!")
                 num_added += 1
+
+                try:
+                    wu.non_words.remove(word)
+                except ValueError:
+                    pass
+
         if num_added:
+            changes = True
             wu.addl_words = sorted(set(wu.addl_words))
             wu.addl_words_file.write_text('\n'.join(wu.addl_words), encoding='utf-8')
             print('    ... updated list of additional words on disk!')
@@ -137,13 +158,20 @@ if __name__ == "__main__":
                 wu.conf_words.append(word)
                 print(f"Added {word.upper()} to list of confirmed words!")
                 num_confirmed += 1
+
+                try:
+                    wu.non_words.remove(word)
+                except ValueError:
+                    pass
+
         if num_confirmed:
+            changes = True
             wu.conf_words = sorted(set(wu.conf_words))
             wu.conf_words_file.write_text('\n'.join(wu.conf_words), encoding='utf-8')
             print('    ... updated list of confirmed words on disk!')
             print(f"    ... list of confirmed words now has {len(wu.conf_words)} entries!")
 
-    # If we performed one or more maintenance tasks, quit without running the main script
+    # If we tried to perform one or more maintenance tasks, quit without running the main script
     if (('add_word' in args) and (args['add_word'])) or \
         (('eliminate_word' in args) and (args['eliminate_word'])) or \
         (('confirm_word' in args) and (args['confirm_word'])):
@@ -158,5 +186,8 @@ if __name__ == "__main__":
                 print(w.upper())
             else:
                 print(w)
+
+        print(f"\n{len(possible_answers)} possibilities ({len(possible_answers) - len({w for w in wu.conf_words if w in possible_answers})} unconfirmed)!\n")
+
     else:
         print("No possibilities found!")
