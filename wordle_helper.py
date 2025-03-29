@@ -32,6 +32,7 @@ file LICENSE.md for details.
 
 
 import argparse
+import collections
 import typing
 import string
 import sys
@@ -48,7 +49,7 @@ print('\n\n\nStarting up ...')
 print(f"    (running under Python {sys.version}")
 
 
-def prompt_and_solve() -> typing.Tuple[str, str, typing.List[str]]:
+def prompt_and_solve() -> typing.Tuple[str, str, collections.Counter, typing.Set[str]]:
     print(f"{len(wu.known_five_letter_words)} five-letter words known!\n\n")
 
     if input("Have you entirely eliminated any letters? ").strip().lower()[0] == 'y':
@@ -106,7 +107,7 @@ if __name__ == "__main__":
     if ('eliminate_word' in args) and (args['eliminate_word']):
         num_removed = 0
         start_len = len(wu.non_words)
-        for word in [w.strip().casefold() for w in args['eliminate_word']]:
+        for word in sorted([w.strip().casefold() for w in args['eliminate_word']]):
             if len(word) == 5:
                 wu.non_words.append(word)
                 print(f"Added {word.upper()} to list of non-words!")
@@ -132,7 +133,7 @@ if __name__ == "__main__":
     if ('add_word' in args) and (args['add_word']):
         num_added = 0
         start_len = len(wu.addl_words)
-        for word in [w.strip().casefold() for w in args['add_word']]:
+        for word in sorted([w.strip().casefold() for w in args['add_word']]):
             if len(word) == 5:
                 wu.addl_words.append(word)
                 print(f"Added {word.upper()} to list of additional words!")
@@ -153,7 +154,7 @@ if __name__ == "__main__":
     if ('confirm_word' in args) and (args['confirm_word']):
         num_confirmed = 0
         start_len = len(wu.conf_words)
-        for word in [w.strip().casefold() for w in args['confirm_word']]:
+        for word in sorted([w.strip().casefold() for w in args['confirm_word']]):
             if len(word) == 5:
                 wu.conf_words.append(word)
                 print(f"Added {word.upper()} to list of confirmed words!")
@@ -175,6 +176,7 @@ if __name__ == "__main__":
     if (('add_word' in args) and (args['add_word'])) or \
         (('eliminate_word' in args) and (args['eliminate_word'])) or \
         (('confirm_word' in args) and (args['confirm_word'])):
+        print("\n  ... all requested actions performed! Quitting ...")
         sys.exit(0)
 
     known_letters, untried_letters, letter_frequencies, possible_answers = prompt_and_solve()
