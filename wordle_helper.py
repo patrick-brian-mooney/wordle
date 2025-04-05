@@ -33,6 +33,7 @@ file LICENSE.md for details.
 
 import argparse
 import collections
+import readline
 import typing
 import string
 import sys
