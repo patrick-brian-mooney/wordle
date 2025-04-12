@@ -1,3 +1,4 @@
+aalii
 abaca
 abaka
 abamp
@@ -17,6 +18,7 @@ agene
 aglee
 agoge
 agone
+aheap
 ainee
 airts
 aizle
@@ -28,6 +30,8 @@ algal
 aline
 alist
 aliya
+allan
+allyl
 almeh
 aloin
 alose
@@ -36,10 +40,13 @@ alula
 ameba
 amene
 amine
+amman
 amole
 anana
 ancle
 anele
+annal
+annat
 anole
 ansae
 antae
@@ -63,6 +70,7 @@ assam
 ataxy
 atoke
 aurae
+aurar
 avine
 axile
 axite
@@ -76,6 +84,7 @@ bacca
 bagie
 baile
 barbe
+barra
 barre
 batta
 bedel
@@ -102,23 +111,28 @@ bombo
 boner
 boomy
 boose
+bortz
 bouse
 bowse
 brant
 brent
 brise
 brose
+bruja
 bubby
 buffy
 bulse
+buroo
 burse
 butut
 cabre
+cacao
 cacas
 cadee
 cadie
 caeca
 calla
+capax
 carle
 carse
 carte
@@ -128,6 +142,8 @@ cense
 ceorl
 cered
 certy
+cheka
+chela
 chelp
 cheth
 chevy
@@ -238,8 +254,11 @@ flamy
 flawy
 flexo
 flong
+fluor
+foram
 forel
 foret
+forgo
 fosse
 freit
 frise
@@ -273,6 +292,7 @@ glout
 gogga
 grein
 grise
+groma
 gulfy
 gunky
 gunny
@@ -299,6 +319,7 @@ hevea
 hewgh
 ictic
 ident
+ilial
 imaum
 immew
 immit
@@ -319,8 +340,10 @@ jewed
 jheel
 jinni
 jnana
+joram
 jugum
 jumby
+jurat
 kaama
 kabab
 kaiak
@@ -346,6 +369,7 @@ knurl
 krait
 krang
 kurku
+kurta
 laksa
 lappa
 largo
@@ -399,6 +423,7 @@ mecca
 mecum
 medle
 meech
+mense
 mered
 merer
 meril
@@ -420,16 +445,23 @@ monal
 moner
 morae
 moran
+morat
+mormo
+moror
+morro
 moste
 motet
 muffy
 mulse
 mummy
+murva
 muzzy
 myall
+namma
 nance
 nappe
 naric
+narra
 nebby
 neeld
 neese
@@ -451,6 +483,7 @@ odyle
 ogeed
 ohelo
 okapi
+okrug
 oleic
 olein
 olent
@@ -484,6 +517,7 @@ peepy
 peggy
 peise
 penni
+pense
 perse
 petti
 petto
@@ -546,6 +580,7 @@ rimed
 riped
 rived
 rivel
+robur
 roily
 roose
 rooty
@@ -556,6 +591,7 @@ roven
 rowel
 rowet
 royet
+rubor
 ruely
 rugae
 ruggy
@@ -743,12 +779,14 @@ taber
 taler
 tanga
 tangi
+tanna
 tappa
 targe
 tarre
 tarsi
 tarte
 tasse
+tatar
 tatie
 tatty
 tawse
@@ -763,7 +801,9 @@ teste
 tewed
 tewel
 tewit
+theca
 theek
+thema
 tined
 toise
 tolan
@@ -777,6 +817,7 @@ traik
 trank
 trema
 triol
+troak
 trock
 trogs
 trois
@@ -785,7 +826,9 @@ tronc
 tronk
 trows
 troys
+tryma
 tubae
+tubar
 tunny
 turfy
 tutty
@@ -797,6 +840,7 @@ undee
 undue
 ungot
 unred
+unsee
 urali
 urdee
 ureid
@@ -824,6 +868,7 @@ wanle
 weety
 welly
 wenny
+wheal
 wheen
 wheep
 wried
@@ -841,6 +886,7 @@ yobbo
 yodle
 youse
 yucky
+yurta
 zaire
 zanza
 zanze
@@ -852,5 +898,6 @@ zizit
 zloty
 zocco
 zoeae
+zokor
 zooty
 zorro

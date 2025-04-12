@@ -59,7 +59,7 @@ def prompt_and_solve() -> typing.Tuple[str, str, collections.Counter, typing.Set
         elim = ''
 
     if input("Do you have any letters yet without knowing their position? ").strip().lower()[0] == 'y':
-        correct = wu.normalize_char_string(input("Enter all known letters: "))
+        correct = wu.normalize_char_string(input("Enter all such letters: "))
     else:
         correct = ''
 
