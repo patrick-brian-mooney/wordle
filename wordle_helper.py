@@ -177,7 +177,7 @@ if __name__ == "__main__":
     if (('add_word' in args) and (args['add_word'])) or \
         (('eliminate_word' in args) and (args['eliminate_word'])) or \
         (('confirm_word' in args) and (args['confirm_word'])):
-        print("\n  ... all requested actions performed! Quitting ...")
+        print("\n  ... performed all requested actions! Quitting ...\n")
         sys.exit(0)
 
     known_letters, untried_letters, letter_frequencies, possible_answers = prompt_and_solve()
