@@ -42,6 +42,16 @@ non_words = [w.strip().casefold() for w in non_words_file.read_text(encoding='ut
 addl_words = [w.strip().casefold() for w in addl_words_file.read_text(encoding='utf-8').split('\n') if w.strip()]
 conf_words = [w.strip().casefold() for w in conf_words_file.read_text(encoding='utf-8').split('\n') if w.strip()]
 
+contradictory_words = set(non_words).intersection(set(conf_words))
+if contradictory_words:
+    print(f"Found {len(contradictory_words)} words listed as both confirmed words and as non-words ...")
+    print("    ... eliminating from both lists.")
+    non_words = [w for w in non_words if w not in contradictory_words]
+    non_words_file.write_text('\n'.join(sorted(set(non_words))), encoding='utf-8')
+
+    conf_words = [w for w in conf_words if not w in contradictory_words]
+    conf_words_file.write_text('\n'.join(sorted(set(conf_words))), encoding='utf-8')
+
 main_english_words = [w.strip().casefold() for w in word_list_file.read_text(encoding='utf-8').split('\n') if w.strip()]
 known_five_letter_words = {w for w in (main_english_words + addl_words) if ((len(w) == 5) and (w not in non_words))}
 word_list_text = '\n'.join(sorted(known_five_letter_words))     # these are the only words we're ever interested in

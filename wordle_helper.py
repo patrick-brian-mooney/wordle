@@ -105,7 +105,7 @@ if __name__ == "__main__":
 
     changes = False     # set to True if we make any changes to word lists.
 
-    if ('eliminate_word' in args) and (args['eliminate_word']):
+    if ('eliminate_word' in args) and (args['eliminate_word']):     # FIXME: also remove from list of confirmed words?
         num_removed = 0
         start_len = len(wu.non_words)
         for word in sorted([w.strip().casefold() for w in args['eliminate_word']]):
@@ -131,7 +131,7 @@ if __name__ == "__main__":
             print('    ... updated list of non-words on disk!')
             print(f"    ... list of non-words now has {len(wu.non_words)} entries!")
 
-    if ('add_word' in args) and (args['add_word']):
+    if ('add_word' in args) and (args['add_word']):         # FIXME: also remove from list of non-words!
         num_added = 0
         start_len = len(wu.addl_words)
         for word in sorted([w.strip().casefold() for w in args['add_word']]):
