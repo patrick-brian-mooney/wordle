@@ -103,8 +103,6 @@ if __name__ == "__main__":
                         help="A word to add to the list of potential words to consider.")
     args = vars(parser.parse_args())
 
-    changes = False     # set to True if we make any changes to word lists.
-
     if ('eliminate_word' in args) and (args['eliminate_word']):     # FIXME: also remove from list of confirmed words?
         num_removed = 0
         start_len = len(wu.non_words)
@@ -125,10 +123,8 @@ if __name__ == "__main__":
                     pass
 
         if num_removed:
-            changes = True
-            wu.non_words = sorted(set(wu.non_words))
-            wu.non_words_file.write_text('\n'.join(wu.non_words), encoding='utf-8')
-            print('    ... updated list of non-words on disk!')
+            wu.save_word_lists()
+            print('\n    ... updated list of non-words on disk!')
             print(f"    ... list of non-words now has {len(wu.non_words)} entries!")
 
     if ('add_word' in args) and (args['add_word']):         # FIXME: also remove from list of non-words!
@@ -146,10 +142,8 @@ if __name__ == "__main__":
                     pass
 
         if num_added:
-            changes = True
-            wu.addl_words = sorted(set(wu.addl_words))
-            wu.addl_words_file.write_text('\n'.join(wu.addl_words), encoding='utf-8')
-            print('    ... updated list of additional words on disk!')
+            wu.save_word_lists()
+            print('\n    ... updated list of additional words on disk!')
             (print(f"    ... list of additional words now has {len(wu.addl_words)} entries!"))
 
     if ('confirm_word' in args) and (args['confirm_word']):
@@ -167,10 +161,8 @@ if __name__ == "__main__":
                     pass
 
         if num_confirmed:
-            changes = True
-            wu.conf_words = sorted(set(wu.conf_words))
-            wu.conf_words_file.write_text('\n'.join(wu.conf_words), encoding='utf-8')
-            print('    ... updated list of confirmed words on disk!')
+            wu.save_word_lists()
+            print('\n    ... updated list of confirmed words on disk!')
             print(f"    ... list of confirmed words now has {len(wu.conf_words)} entries!")
 
     # If we tried to perform one or more maintenance tasks, quit without running the main script

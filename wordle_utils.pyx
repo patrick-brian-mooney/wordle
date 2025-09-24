@@ -31,26 +31,44 @@ non_words_file = Path('non-words.txt')  # List of words from the large word list
 addl_words_file = Path('addl-words.txt')    # Words added manually, in addition to the main word list.
 conf_words_file = Path('confirmed-words.txt')   # Words we have manually confirmed are definitely in the 'legal' set
 
-if not non_words_file.exists():
-    non_words_file.write_text("", encoding='utf-8')
-if not addl_words_file.exists():
-    addl_words_file.write_text("", encoding='utf-8')
-if not conf_words_file.exists():
+
+def save_word_lists() -> None:
+    """Save all the word lists to disk, after checking for contradictory information.
+
+    We assume that anything that has been added to the "additional words" list really
+    does belong there and don't eliminate information from it.
+    """
+    global non_words, conf_words, addl_words
+
+    contradictory_words = set(non_words).intersection(set(conf_words + addl_words))
+    if contradictory_words:
+        print(f"Found {len(contradictory_words)} words listed as both confirmed words and as non-words ...")
+        print("    ... eliminating from both lists.")
+        non_words = [w for w in non_words if w not in contradictory_words]
+        conf_words = [w for w in conf_words if not w in contradictory_words]
+
+    addl_words_file.write_text('\n'.join(sorted(set(addl_words))), encoding='utf-8')
+    conf_words_file.write_text('\n'.join(sorted(set(conf_words))), encoding='utf-8')
+    non_words_file.write_text('\n'.join(sorted(set(non_words))), encoding='utf-8')
+    print('Validated all word lists and wrote them to disk!')
+
+
+if non_words_file.exists():
+    non_words = [w.strip().casefold() for w in non_words_file.read_text(encoding='utf-8').split('\n') if w.strip()]
+else:
+    non_words = list()
+
+if addl_words_file.exists():
+    addl_words = [w.strip().casefold() for w in addl_words_file.read_text(encoding='utf-8').split('\n') if w.strip()]
+else:
+    addl_words = list()
+
+if conf_words_file.exists():
+    conf_words = [w.strip().casefold() for w in conf_words_file.read_text(encoding='utf-8').split('\n') if w.strip()]
+else:
     conf_words_file.write_text("", encoding='utf-8')
 
-non_words = [w.strip().casefold() for w in non_words_file.read_text(encoding='utf-8').split('\n') if w.strip()]
-addl_words = [w.strip().casefold() for w in addl_words_file.read_text(encoding='utf-8').split('\n') if w.strip()]
-conf_words = [w.strip().casefold() for w in conf_words_file.read_text(encoding='utf-8').split('\n') if w.strip()]
-
-contradictory_words = set(non_words).intersection(set(conf_words))
-if contradictory_words:
-    print(f"Found {len(contradictory_words)} words listed as both confirmed words and as non-words ...")
-    print("    ... eliminating from both lists.")
-    non_words = [w for w in non_words if w not in contradictory_words]
-    non_words_file.write_text('\n'.join(sorted(set(non_words))), encoding='utf-8')
-
-    conf_words = [w for w in conf_words if not w in contradictory_words]
-    conf_words_file.write_text('\n'.join(sorted(set(conf_words))), encoding='utf-8')
+save_word_lists()
 
 main_english_words = [w.strip().casefold() for w in word_list_file.read_text(encoding='utf-8').split('\n') if w.strip()]
 known_five_letter_words = {w for w in (main_english_words + addl_words) if ((len(w) == 5) and (w not in non_words))}
