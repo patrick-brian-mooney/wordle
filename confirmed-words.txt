@@ -14,6 +14,7 @@ abele
 abime
 abmho
 abohm
+abord
 abram
 abray
 abuna
@@ -27,14 +28,18 @@ achoo
 ackee
 acmic
 acock
+acold
 acron
+adage
 adawn
 addax
 adead
 adeem
 adion
+admin
 adrad
 adret
+adrip
 adyta
 aecia
 aeger
@@ -275,6 +280,7 @@ berri
 besee
 besot
 betes
+beton
 betta
 bever
 bevor
@@ -326,6 +332,7 @@ blart
 blate
 blawn
 blebs
+blent
 blimy
 blini
 bliny
@@ -345,6 +352,7 @@ bodge
 bodle
 boffo
 bogan
+bogey
 bogle
 bogue
 bohea
@@ -396,6 +404,7 @@ brent
 brere
 breve
 bribe
+brill
 brise
 briss
 brith
@@ -403,6 +412,7 @@ britt
 brome
 bromo
 brose
+bruit
 bruja
 bubal
 bubas
@@ -467,10 +477,12 @@ catty
 cavie
 cecal
 cecum
+ceint
 cella
 celli
 celom
 cense
+cento
 ceorl
 cepes
 cerci
@@ -516,6 +528,7 @@ cleek
 clepe
 clept
 cleuk
+clift
 clint
 clipt
 cloff
@@ -576,6 +589,7 @@ coppy
 corbe
 corby
 corer
+corey
 corky
 cornu
 corse
@@ -612,6 +626,7 @@ cruse
 ctene
 cubby
 cubeb
+cuber
 cuddy
 cueca
 cuing
@@ -639,21 +654,30 @@ cycas
 cymae
 cyton
 dabba
+daddy
 daffy
 dagga
 daggy
 daint
 dalle
+dally
 daman
 damme
+dampy
 danio
 danny
 daraf
 darer
 datil
+datto
+datum
 daube
+dauby
+dault
 dawed
 dayan
+deare
+deave
 debby
 debel
 debye
@@ -669,10 +693,13 @@ derat
 devel
 diact
 diana
+diane
 diazo
+dicht
 diddy
 didie
 diene
+dight
 diked
 diker
 dildo
@@ -684,12 +711,16 @@ dinic
 diota
 dippy
 dital
+diwan
 dixit
 djinn
 dobie
+dobla
+dobra
 doddy
 doggo
 dogie
+dogma
 dolce
 dolci
 doley
@@ -700,17 +731,21 @@ donee
 donne
 doree
 dorje
+dotal
 doter
 douar
 douce
 dougl
+douma
 doura
 dover
 dowie
 doxie
 draff
 drail
+drake
 drant
+drave
 dread
 dream
 dreed
@@ -726,7 +761,9 @@ dubby
 duddy
 dulce
 dulia
+dumka
 dumky
+dunch
 dungy
 dunny
 duomi
@@ -741,6 +778,7 @@ durry
 durum
 durzi
 dvigu
+dwale
 dwalm
 dwang
 dwine
@@ -790,6 +828,7 @@ enols
 enorm
 enrol
 enure
+envoi
 enzym
 eosin
 epees
@@ -834,6 +873,7 @@ exite
 extol
 exurb
 eyers
+eying
 facia
 facie
 faena
@@ -907,7 +947,9 @@ flear
 fleck
 fleer
 fleme
+fleur
 flexo
+flimp
 flong
 flote
 fluer
@@ -919,6 +961,7 @@ flurr
 flyby
 flype
 flyte
+fogey
 fogie
 fogou
 foldy
@@ -986,6 +1029,7 @@ gater
 gator
 gayal
 gayly
+geese
 geest
 gelee
 gelly
@@ -997,6 +1041,7 @@ genae
 genet
 genic
 genin
+genio
 genip
 genny
 genom
@@ -1009,8 +1054,10 @@ gesso
 geste
 gests
 gibel
+giber
 gibli
 gigue
+gilet
 gilly
 gilpy
 gimel
@@ -1034,6 +1081,7 @@ gleed
 gleek
 glees
 gleet
+glent
 glial
 gliff
 glike
@@ -1053,7 +1101,9 @@ goldy
 golpe
 gombo
 gomer
+goner
 gonof
+gooey
 gooks
 gooky
 gools
@@ -1093,6 +1143,7 @@ guana
 guffs
 guido
 guiro
+guise
 gulas
 gulfy
 gully
@@ -1208,6 +1259,7 @@ huzza
 huzzy
 hyleg
 hymen
+hyoid
 iambi
 icker
 ickle
@@ -1243,6 +1295,7 @@ indue
 inerm
 ingle
 inion
+inker
 inorb
 insee
 intel
@@ -1289,6 +1342,7 @@ jeton
 jewed
 jheel
 jibbs
+jiber
 jiffs
 jiggy
 jills
@@ -1335,6 +1389,7 @@ keefs
 keeks
 keets
 keeve
+kefir
 kelep
 kelly
 kelpy
@@ -1393,6 +1448,7 @@ koran
 kotow
 krait
 krang
+kreng
 krone
 kugel
 kukri
@@ -1427,6 +1483,7 @@ latch
 laten
 lathi
 lathy
+laund
 lavas
 laver
 lawks
@@ -1467,6 +1524,7 @@ lifey
 liger
 ligge
 ligne
+liken
 likin
 liman
 limax
@@ -1519,6 +1577,7 @@ louis
 loury
 lousy
 lovee
+lovey
 lowse
 luffa
 luffs
@@ -1528,6 +1587,7 @@ lulus
 lumme
 lummy
 lunas
+lunet
 lurer
 lurry
 luser
@@ -1648,6 +1708,7 @@ minar
 minas
 mingy
 minim
+mirex
 mirid
 mises
 miter
@@ -1711,11 +1772,14 @@ mould
 mouly
 mozos
 mpret
+mucic
 mucid
 mudir
 muffy
 muggs
 mugil
+mujik
+mukti
 muley
 mulse
 mumms
@@ -1771,10 +1835,12 @@ nelly
 nenes
 nenta
 neper
+nepit
 neral
 nerol
 nerts
 nertz
+netop
 netty
 neume
 nevel
@@ -1828,6 +1894,7 @@ novum
 nubby
 nucha
 nudie
+nudzh
 nugae
 numen
 nunks
@@ -1838,6 +1905,7 @@ nyssa
 oasal
 oater
 obeah
+obeli
 objet
 obole
 ocher
@@ -1869,6 +1937,7 @@ omers
 omlah
 omrah
 oncer
+oncet
 onery
 onium
 ontal
@@ -2038,6 +2107,7 @@ poggy
 poilu
 poind
 poire
+pokey
 poler
 poley
 pommy
@@ -2091,9 +2161,12 @@ puddy
 pudge
 pudic
 puggy
+pugil
+puker
 pukka
 pulas
 puler
+pulik
 pulli
 punce
 pupas
@@ -2107,6 +2180,7 @@ pussy
 putid
 putti
 pyoid
+pyrex
 pyxie
 qanat
 quaky
@@ -2159,6 +2233,7 @@ rebar
 rebbe
 rebec
 rebop
+rebuy
 recce
 recco
 reccy
@@ -2187,12 +2262,14 @@ rehem
 reink
 reist
 reive
+rejig
 rekey
 relet
 relit
 reman
 remen
 remex
+remit
 renga
 renig
 renin
@@ -2253,6 +2330,7 @@ roger
 rohan
 roily
 roker
+rokey
 roleo
 romal
 romeo
@@ -2269,6 +2347,7 @@ rotan
 rotta
 rouen
 roues
+rouse
 roven
 rowel
 rowen
@@ -2322,7 +2401,9 @@ sclim
 scops
 scote
 scoup
+scour
 scove
+scows
 scree
 scrim
 scrip
@@ -2376,11 +2457,14 @@ sibyl
 sicht
 siege
 sills
+silty
 simar
+simps
 simul
 singe
 sings
 sinky
+sippy
 siree
 siris
 siroc
@@ -2392,6 +2476,7 @@ situs
 sixmo
 sixte
 skags
+skail
 skart
 skats
 skene
@@ -2405,6 +2490,7 @@ skyte
 slags
 slane
 slank
+slant
 slart
 slaty
 slaws
@@ -2416,6 +2502,7 @@ sloid
 slojd
 sloom
 sloot
+slopy
 sloyd
 slubs
 sluff
@@ -2435,6 +2522,8 @@ smolt
 smoot
 smout
 snafu
+snark
+snary
 snaws
 sneap
 snibs
@@ -2458,6 +2547,7 @@ socle
 sodic
 sodom
 softs
+softy
 soily
 solon
 solus
@@ -2480,12 +2570,19 @@ sowle
 sowse
 sozly
 spack
+spail
+spain
 spait
 spale
 spall
+spalt
 spane
+spang
+spark
 spart
+spasm
 spate
+spawl
 speal
 spean
 spick
@@ -2500,7 +2597,10 @@ spiry
 spitz
 spivs
 split
+spoof
+spook
 spoom
+spoor
 spoot
 spout
 sprit
@@ -2510,10 +2610,15 @@ sprug
 spumy
 squit
 squiz
+stagy
+staig
 stain
 stane
+stang
 starn
 starr
+stary
+staun
 stean
 stela
 stele
@@ -2575,11 +2680,15 @@ surgy
 sutor
 swack
 swage
+swail
+swain
 swale
 swami
 swamy
+swang
 sware
 swarf
+swart
 swigs
 swile
 swink
@@ -2597,6 +2706,7 @@ sybil
 sybow
 sycee
 sycon
+syncs
 taata
 tabac
 taber
@@ -2634,6 +2744,7 @@ tejon
 tekke
 telae
 telex
+telic
 telly
 teloi
 telyn
@@ -2726,9 +2837,11 @@ triad
 trial
 trier
 trigo
+trill
 trine
 triol
 trist
+troad
 troak
 trock
 trogs
@@ -2751,6 +2864,7 @@ tulle
 tumid
 tunny
 tupek
+tupik
 tuque
 turfy
 tutti
@@ -2758,10 +2872,12 @@ tutty
 tuyer
 tweel
 tween
+twerp
 twier
 twill
 twilt
 twite
+twixt
 twyer
 tyees
 tyler
@@ -2770,6 +2886,7 @@ typps
 ugali
 ulama
 ulema
+ulnad
 ulnae
 ulnar
 umbel
@@ -2853,6 +2970,7 @@ vexil
 vibex
 viewy
 vigia
+viler
 ville
 villi
 vills
@@ -2879,6 +2997,7 @@ volet
 volte
 volva
 vomer
+vower
 vraic
 vroom
 vuggs
@@ -2919,6 +3038,7 @@ wicky
 widdy
 wifie
 willy
+winey
 winze
 wirra
 wists
@@ -2938,6 +3058,7 @@ worts
 wrang
 wrawl
 wrest
+wrick
 wried
 wrier
 wroot
@@ -2945,6 +3066,7 @@ wryer
 wynns
 xebec
 xenic
+xeric
 xerox
 xoana
 xviii
@@ -2982,6 +3104,7 @@ yobbo
 yodle
 yogee
 yogin
+yoker
 yonic
 yourn
 yourt
