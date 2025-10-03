@@ -13,7 +13,7 @@ file LICENSE.md for details.
 """
 
 
-import collections
+import collections, collections.abc
 import heapq
 import numbers
 import re
@@ -32,6 +32,127 @@ addl_words_file = Path('addl-words.txt')    # Words added manually, in addition 
 conf_words_file = Path('confirmed-words.txt')   # Words we have manually confirmed are definitely in the 'legal' set
 
 
+class WordSet(collections.abc.MutableSet):
+    """A WordSet is a set of words that we're dealing with. We use this to keep track
+    of which words are in which categories: are they non-words (for Wordle's
+    purposes), confirmed words (according to Wordle), etc.
+
+    It supports all the regular set operations, but with some additional validation;
+    and it tracks what its contents were the last time it was saved, so we can avoid
+    spuriously writing to disk if nothing has changed.
+    """
+    def __init__(self, *items):
+        self._data = set()
+        for i in items:
+            self.add(i)
+
+        self._previous_data = set(self._data)
+        self._file: typing.Optional[Path] = None
+
+    @staticmethod
+    def from_file(which_file: Path) -> 'WordSet':
+        """Alternate constructor: build a WordSet from all valid entries in a one-
+        word-per-line text file. Silently ignore invalid entries.
+        """
+        assert isinstance(which_file, Path)
+        ret = WordSet()
+        ret._file = which_file
+
+        if which_file.exists():
+            for w in open(which_file, mode='rt', encoding='utf-8'):
+                try:
+                    if len(w.strip()) == 5:     # explicitly test length: most common problem + catching errors is slow
+                        ret.add(w)
+                except ValueError:
+                    pass        # Ignore words in the file that don't meet expectations.
+        else:
+            which_file.write_text('', encoding='utf-8')
+
+        ret._previous_data = set(ret._data)
+        return ret
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, WordSet):  # Things that are not WordSets are definitionally not equal to WordSets
+            return False
+        return self._data == other._data
+
+    def __repr__(self) -> str:
+        return f"WordSet({', '.join([i for i in self._data])})"
+
+    def __iter__(self):
+        return iter(self._data)
+
+    def __len__(self) -> int:
+        return len(self._data)
+
+    def __contains__(self, item) -> bool:
+        item = item.strip().casefold()
+        return item in self._data
+
+    def __or__(self, other: 'WordSet') -> 'WordSet':
+        """Implementing set joining here because it occasionally helps make code
+        more terse. The returned set is new, even if SELF or OTHER is empty; it
+        does not transfer over the_PREVIOUS DATA attribute of either set. The
+        underlying _FILE attribute comes from SELF, unless SELF does not have it set
+        and OTHER does, in which case it comes from OTHER; so order matters. (This
+        behavior helps to support in-place set joining that doesn't lose track of
+        what the underlying disk representation is.)
+        """
+        ret = WordSet()
+        ret._file = self._file or other._file
+
+        for i in self:
+            ret.add(i)
+        for i in other:
+            ret.add(i)
+
+        return ret
+
+    def add(self, value) -> None:
+        if not isinstance(value, str):
+            raise ValueError("ERROR! Cannot add a non-string value to a WordSet!")
+
+        value = value.strip().casefold()
+
+        if len(value) != 5:
+            raise ValueError("ERROR! Words added to a WordSet must be five letters long!")
+        if not value.isalpha():
+            raise ValueError("ERROR! Words added to a WordSet may contain only letters!")
+
+        self._data.add(value)
+
+    def discard(self, value) -> None:
+        value = value.strip().casefold()
+        self._data.discard(value)
+
+    def save(self, verbosity: int = 1) -> None:
+        """Save data to disk. Requires that self._file is set and is a Path.
+
+        If VERBOSITY is 0, is silent. If VERBOSITY is 1, reports when data is
+        written to disk. If VERBOSITY is 2, also reports when data is not written to
+        disk because no changes have been made.
+        """
+        assert isinstance(self._file, Path)
+        if self._data == self._previous_data:
+            if verbosity == 2:
+                print(f"    ... not saving data to {self._file}: no changes made!")
+            return
+
+        self._file.write_text('\n'.join(sorted(self._data)), encoding='utf-8')
+        self._previous_data = set(self._data)
+        if verbosity == 1:
+            print(f"    ... saved changed data to {self._file}!")
+
+
+main_word_list = WordSet.from_file(word_list_file)
+addl_words = WordSet.from_file(addl_words_file)
+non_words = WordSet.from_file(non_words_file)
+conf_words = WordSet.from_file(conf_words_file)
+
+known_five_letter_words = {w for w in (main_word_list | addl_words) if w not in non_words}
+word_list_text = '\n'.join(sorted(known_five_letter_words))     # these are the only words we're ever interested in
+
+
 def save_word_lists() -> None:
     """Save all the word lists to disk, after checking for contradictory information.
 
@@ -40,39 +161,25 @@ def save_word_lists() -> None:
     """
     global non_words, conf_words, addl_words
 
-    contradictory_words = set(non_words).intersection(set(conf_words + addl_words))
+    contradictory_words = WordSet()
+    for w in non_words:
+        if (w in conf_words) or (w in addl_words):
+            contradictory_words.add(w)
+
     if contradictory_words:
         print(f"Found {len(contradictory_words)} words listed as both confirmed words and as non-words ...")
         print("    ... eliminating from both lists.")
-        non_words = [w for w in non_words if w not in contradictory_words]
-        conf_words = [w for w in conf_words if not w in contradictory_words]
+        for w in contradictory_words:
+            non_words.discard(w)
+            conf_words.discard(w)
+            non_words.discard(w)
 
-    addl_words_file.write_text('\n'.join(sorted(set(addl_words))), encoding='utf-8')
-    conf_words_file.write_text('\n'.join(sorted(set(conf_words))), encoding='utf-8')
-    non_words_file.write_text('\n'.join(sorted(set(non_words))), encoding='utf-8')
-    print('Validated all word lists and wrote them to disk!')
+    addl_words.save()
+    conf_words.save()
+    non_words.save()
 
-
-if non_words_file.exists():
-    non_words = [w.strip().casefold() for w in non_words_file.read_text(encoding='utf-8').split('\n') if w.strip()]
-else:
-    non_words = list()
-
-if addl_words_file.exists():
-    addl_words = [w.strip().casefold() for w in addl_words_file.read_text(encoding='utf-8').split('\n') if w.strip()]
-else:
-    addl_words = list()
-
-if conf_words_file.exists():
-    conf_words = [w.strip().casefold() for w in conf_words_file.read_text(encoding='utf-8').split('\n') if w.strip()]
-else:
-    conf_words_file.write_text("", encoding='utf-8')
 
 save_word_lists()
-
-main_english_words = [w.strip().casefold() for w in word_list_file.read_text(encoding='utf-8').split('\n') if w.strip()]
-known_five_letter_words = {w for w in (main_english_words + addl_words) if ((len(w) == 5) and (w not in non_words))}
-word_list_text = '\n'.join(sorted(known_five_letter_words))     # these are the only words we're ever interested in
 
 
 SolutionData = collections.namedtuple('SolutionData', ('Move',

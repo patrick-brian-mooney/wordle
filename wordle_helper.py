@@ -104,71 +104,62 @@ if __name__ == "__main__":
     args = vars(parser.parse_args())
 
     if ('eliminate_word' in args) and (args['eliminate_word']):     # FIXME: also remove from list of confirmed words?
-        num_removed = 0
         start_len = len(wu.non_words)
-        for word in sorted([w.strip().casefold() for w in args['eliminate_word']]):
-            if len(word) == 5:
-                wu.non_words.append(word)
+        for word in sorted(args['eliminate_word']):
+            prev_len = len(wu.non_words)
+
+            try:
+                wu.non_words.add(word)
+            except ValueError as errr:
+                print(f"Could not add {word.upper()} to list of non-words! The system said: {errr}")
+
+            if len(wu.non_words) != prev_len:
                 print(f"Added {word.upper()} to list of non-words!")
-                num_removed += 1
+                wu.addl_words.discard(word)
+                wu.conf_words.discard(word)
 
-                try:
-                    wu.addl_words.remove(word)
-                except ValueError:
-                    pass
-
-                try:
-                    wu.conf_words.remove(word)
-                except ValueError:
-                    pass
-
-        if num_removed:
-            wu.save_word_lists()
-            print('\n    ... updated list of non-words on disk!')
-            print(f"    ... list of non-words now has {len(wu.non_words)} entries!")
+        if len(wu.non_words) != start_len:
+            print(f"    ... list of non-words now has {len(wu.non_words)} entries!\n")
 
     if ('add_word' in args) and (args['add_word']):         # FIXME: also remove from list of non-words!
-        num_added = 0
         start_len = len(wu.addl_words)
-        for word in sorted([w.strip().casefold() for w in args['add_word']]):
-            if len(word) == 5:
-                wu.addl_words.append(word)
+        for word in sorted(args['add_word']):
+            prev_len = len(wu.addl_words)
+
+            try:
+                wu.addl_words.add(word)
+            except ValueError as errr:
+                print(f"Could not add {word.upper()} to list of additional words! The system said: {errr}")
+
+            if len(wu.addl_words) != prev_len:
                 print(f"Added {word.upper()} to list of additional words!")
-                num_added += 1
+                wu.non_words.discard(word)
 
-                try:
-                    wu.non_words.remove(word)
-                except ValueError:
-                    pass
-
-        if num_added:
-            wu.save_word_lists()
-            print('\n    ... updated list of additional words on disk!')
-            (print(f"    ... list of additional words now has {len(wu.addl_words)} entries!"))
+        if len(wu.addl_words) != start_len:
+            print(f"    ... list of additional words now has {len(wu.addl_words)} entries!\n")
 
     if ('confirm_word' in args) and (args['confirm_word']):
-        num_confirmed = 0
         start_len = len(wu.conf_words)
-        for word in sorted([w.strip().casefold() for w in args['confirm_word']]):
-            if len(word) == 5:
-                wu.conf_words.append(word)
+        for word in sorted(args['confirm_word']):
+            prev_len = len(wu.conf_words)
+            
+            try:
+                wu.conf_words.add(word)
+            except ValueError as errr:
+                print(f"Could not add word {word.upper()} to list of confirmed words! The system said: {errr}")
+
+            if len(wu.conf_words) != prev_len:
                 print(f"Added {word.upper()} to list of confirmed words!")
-                num_confirmed += 1
+                wu.non_words.discard(word)
 
-                try:
-                    wu.non_words.remove(word)
-                except ValueError:
-                    pass
-
-        if num_confirmed:
-            wu.save_word_lists()
-            print('\n    ... updated list of confirmed words on disk!')
-            print(f"    ... list of confirmed words now has {len(wu.conf_words)} entries!")
+        if len(wu.conf_words) != start_len:
+            print(f"    ... list of confirmed words now has {len(wu.conf_words)} entries!\n")
 
     # If we tried to perform one or more maintenance tasks, quit without running the main script
     if (('add_word' in args) and (args['add_word'])) or \
         (('eliminate_word' in args) and (args['eliminate_word'])) or \
         (('confirm_word' in args) and (args['confirm_word'])):
+        wu.save_word_lists()
         print("\n  ... performed all requested actions! Quitting ...\n")
         sys.exit(0)
 
