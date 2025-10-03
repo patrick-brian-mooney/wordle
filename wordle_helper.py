@@ -142,7 +142,7 @@ if __name__ == "__main__":
         start_len = len(wu.conf_words)
         for word in sorted(args['confirm_word']):
             prev_len = len(wu.conf_words)
-            
+
             try:
                 wu.conf_words.add(word)
             except ValueError as errr:

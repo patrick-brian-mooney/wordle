@@ -35,7 +35,9 @@ conf_words_file = Path('confirmed-words.txt')   # Words we have manually confirm
 class WordSet(collections.abc.MutableSet):
     """A WordSet is a set of words that we're dealing with. We use this to keep track
     of which words are in which categories: are they non-words (for Wordle's
-    purposes), confirmed words (according to Wordle), etc.
+    purposes), confirmed words (according to Wordle), etc. WordSets do validation
+    on elements added to them to make sure their elements are appropriate Wordle
+    words.
 
     It supports all the regular set operations, but with some additional validation;
     and it tracks what its contents were the last time it was saved, so we can avoid
