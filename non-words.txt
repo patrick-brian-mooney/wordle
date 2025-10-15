@@ -27,6 +27,7 @@ accum
 accur
 achen
 achor
+ackey
 acoin
 acoma
 acone
@@ -79,6 +80,7 @@ ajava
 ajhar
 akala
 akali
+akebi
 akeki
 akiki
 akkad
@@ -186,6 +188,7 @@ ardea
 arder
 arean
 areek
+areel
 arend
 areng
 arent
@@ -245,6 +248,7 @@ atule
 atune
 atypy
 aucan
+aueto
 aulae
 aurin
 autor
@@ -253,6 +257,8 @@ auxil
 avell
 avena
 avera
+aveum
+aview
 avile
 avoke
 avoue
@@ -349,6 +355,7 @@ beety
 beeve
 befop
 befur
+begay
 begut
 behap
 behav
@@ -356,6 +363,7 @@ behen
 behew
 beice
 beild
+bejan
 bejel
 bejib
 bejig
@@ -368,6 +376,7 @@ benic
 benin
 benjy
 benzo
+bepaw
 bepen
 bepun
 berat
@@ -396,6 +405,7 @@ biham
 bilbi
 bilic
 bilin
+binny
 birne
 biron
 birri
@@ -426,6 +436,7 @@ bocoy
 boder
 boget
 bohor
+boiko
 boily
 boise
 bokom
@@ -438,6 +449,7 @@ bonos
 booly
 boone
 boonk
+boort
 boosy
 borak
 borel
@@ -479,6 +491,7 @@ bruzz
 btise
 buaze
 bucca
+bucco
 bucky
 budgy
 bueno
@@ -497,6 +510,7 @@ butic
 butsu
 buxus
 byard
+bynin
 byrri
 caaba
 caama
@@ -553,6 +567,7 @@ cauma
 cavae
 caval
 cavea
+cavey
 cavia
 ccitt
 ccoya
@@ -696,6 +711,7 @@ cumbu
 cumic
 cumly
 cunan
+cunni
 cunye
 curch
 currs
@@ -837,6 +853,7 @@ echar
 echea
 ecize
 ecoid
+edana
 edder
 eddie
 edoni
@@ -847,9 +864,11 @@ effet
 effie
 egrid
 egypt
+eimak
 eimer
 ekaha
 ekron
+eland
 eleme
 eleut
 eleve
@@ -865,6 +884,7 @@ elses
 elvet
 elymi
 emane
+embay
 embue
 emden
 emigr
@@ -955,6 +975,7 @@ falla
 falus
 fanam
 fanwe
+fardh
 farth
 fator
 fause
@@ -1017,6 +1038,7 @@ forra
 forst
 fosie
 fotui
+fourb
 foute
 fpsps
 fraid
@@ -1040,6 +1062,7 @@ friss
 fuder
 fugit
 fulah
+fultz
 fulup
 fumer
 funge
@@ -1210,14 +1233,17 @@ habab
 habet
 habub
 hacht
+haddo
 hagar
 haggy
 hagia
+haida
 haikh
 haiti
 hajib
 hakka
 halch
+haldu
 haloa
 haman
 hamli
@@ -1235,6 +1261,7 @@ hatti
 hawer
 hawky
 hawok
+haydn
 hazen
 hecco
 heezy
@@ -1258,6 +1285,7 @@ hibla
 hienz
 hiera
 higra
+hilda
 hinch
 hipmi
 hippa
@@ -1315,6 +1343,7 @@ imber
 imcnt
 immis
 immov
+immun
 impen
 imper
 imvia
@@ -1350,6 +1379,7 @@ inorg
 inrol
 insol
 insue
+intnl
 intue
 invoy
 iodal
@@ -1399,6 +1429,7 @@ jarry
 javan
 jawab
 jazey
+jebat
 jeery
 jehup
 jelib
@@ -1503,9 +1534,11 @@ kilah
 kileh
 kilij
 killy
+kimmo
 kinah
 kinoo
 kinot
+kioea
 kioko
 kippy
 kirve
@@ -1565,6 +1598,7 @@ kusan
 kusum
 kutta
 kwapa
+kyoto
 laang
 labba
 labby
@@ -1663,6 +1697,7 @@ loket
 loope
 lored
 loren
+lorum
 lotan
 lotor
 louey
@@ -1695,12 +1730,14 @@ maana
 macan
 macao
 macco
+mafey
 mafoo
 maggy
 maghi
 magog
 mahar
 mahat
+mahdi
 mahra
 mahri
 maine
@@ -1789,6 +1826,7 @@ misce
 mitty
 mizar
 mnage
+mnium
 mocoa
 moeck
 moier
@@ -1897,12 +1935,14 @@ novem
 nowel
 npeel
 nudum
+nummi
 numud
 nunch
 nunki
 nunni
 nunry
 nurly
+nurry
 nyaya
 nydia
 nymms
@@ -1949,6 +1989,7 @@ oshea
 osmin
 ossal
 otate
+otkon
 ouabe
 outen
 outly
@@ -2009,6 +2050,7 @@ pheal
 piaba
 piala
 picae
+picea
 pidan
 piest
 piete
@@ -2032,6 +2074,7 @@ pleis
 pleny
 pliss
 plote
+plott
 plupf
 pneum
 pohna
@@ -2074,6 +2117,7 @@ pumex
 punan
 purey
 pylic
+pynot
 qatar
 qiana
 quata
@@ -2082,6 +2126,7 @@ quauk
 quave
 qubba
 queak
+queal
 queet
 quegh
 quelt
@@ -2132,6 +2177,7 @@ rerub
 resex
 retal
 retan
+retar
 reuel
 rever
 rexen
@@ -2164,6 +2210,7 @@ rotse
 rovet
 rowte
 roxie
+rozum
 rucky
 rudge
 rumex
@@ -2557,6 +2604,7 @@ tisic
 tiver
 tmema
 toher
+tokyo
 toldo
 tombe
 tonto
@@ -2636,6 +2684,7 @@ tyste
 tzaam
 ualis
 uaupe
+uayeb
 udell
 uigur
 uinal
@@ -2837,6 +2886,7 @@ xenyl
 xeres
 xurel
 xxiii
+xylon
 yabbi
 yaboo
 yacal
@@ -2845,6 +2895,7 @@ yagua
 yahan
 yakan
 yalla
+yameo
 yamph
 yanan
 yanky
@@ -2874,6 +2925,7 @@ youze
 yoven
 yquem
 ytter
+yukon
 yurak
 yuruk
 zakah
