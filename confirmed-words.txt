@@ -58,6 +58,7 @@ aglee
 agmas
 agoge
 agone
+agria
 aguey
 aheap
 aimak
@@ -67,6 +68,7 @@ airns
 airth
 airts
 aitch
+aiwan
 aizle
 ajiva
 ajuga
@@ -105,6 +107,7 @@ alowe
 altho
 alula
 alure
+alvar
 alway
 amain
 amaut
@@ -148,6 +151,7 @@ aport
 appal
 appay
 appel
+appro
 apptd
 appui
 aquae
@@ -166,6 +170,7 @@ argil
 argle
 arhat
 ariel
+ariki
 arils
 ariot
 arith
@@ -200,6 +205,7 @@ aurae
 aurar
 auric
 auris
+aurum
 avale
 avgas
 avine
@@ -255,9 +261,11 @@ basal
 basan
 bassy
 basyl
+batik
 batta
 battu
 batty
+bawty
 bazar
 bazoo
 beard
@@ -478,7 +486,9 @@ calve
 caman
 canna
 capax
+caput
 carap
+carat
 carle
 carls
 carse
@@ -608,6 +618,7 @@ corse
 cosec
 coses
 cosie
+cotta
 courb
 covey
 covin
@@ -895,11 +906,13 @@ eyers
 eying
 facia
 facie
+facty
 faena
 faffy
 faggy
 faire
 fally
+fanal
 fanga
 fango
 fanny
@@ -909,6 +922,7 @@ farer
 farle
 farls
 farse
+fatty
 fatwa
 faugh
 faute
@@ -1035,6 +1049,7 @@ fytte
 gadge
 gaffs
 gager
+gaitt
 galax
 galea
 gally
@@ -1403,13 +1418,17 @@ kamas
 kamik
 kanae
 kanas
+kanat
 kaneh
 kanga
 kapai
 kapas
 kapok
 kappa
+kaput
 karat
+karoo
+karri
 kavas
 kecks
 kedge
@@ -1466,6 +1485,7 @@ knurl
 kohen
 koine
 kokam
+kokra
 kokum
 kolas
 kondo
@@ -1474,6 +1494,7 @@ kopek
 kopje
 koppa
 koran
+koroa
 kotow
 krait
 krang
@@ -1637,6 +1658,7 @@ lyses
 lysis
 lysol
 lyssa
+lytta
 machi
 macle
 magas
@@ -1684,6 +1706,7 @@ marls
 marse
 massa
 masse
+matai
 mater
 matra
 matty
@@ -1692,6 +1715,7 @@ mavew
 mavie
 mayan
 mayas
+mazut
 mecca
 mecum
 medle
@@ -1823,6 +1847,7 @@ mugil
 mujik
 mukti
 muley
+mulla
 mulse
 mumbo
 mumms
@@ -1831,6 +1856,7 @@ mumsy
 munge
 murex
 murid
+murra
 murre
 murrs
 murry
@@ -1861,6 +1887,7 @@ naris
 narra
 nasal
 natch
+natty
 navar
 navvy
 nawab
@@ -2044,6 +2071,7 @@ panga
 panna
 panne
 panto
+paolo
 papaw
 papey
 pappi
@@ -2052,12 +2080,15 @@ parge
 parle
 parma
 parra
+parti
+party
 parve
 passu
 patee
 patel
 paten
 pater
+patia
 patta
 patte
 pattu
@@ -2126,6 +2157,7 @@ pippy
 pirog
 piste
 piton
+pitta
 plack
 plaga
 plage
@@ -2249,6 +2281,7 @@ quink
 quipu
 quirl
 quoin
+rabat
 raffs
 ragas
 ragee
@@ -2273,6 +2306,7 @@ rasse
 ratch
 ratel
 ratha
+ratti
 rauli
 ravel
 rayah
@@ -2766,17 +2800,22 @@ syncs
 taata
 tabac
 taber
+tabla
+tacan
 tacet
 tachi
 tafia
 taggy
 tagua
 tains
+talak
 taler
 talon
+talpa
 tammy
 tanga
 tangi
+tanka
 tanna
 tanto
 tapet
@@ -2789,10 +2828,12 @@ tarte
 tasse
 tatar
 tatie
+tatou
 tatty
 taube
 tawie
 tawse
+tayra
 tazza
 tazze
 techy
@@ -3103,6 +3144,7 @@ widdy
 wifie
 willy
 winey
+winna
 winze
 wirra
 wists
@@ -3147,6 +3189,7 @@ yahoo
 yaird
 yajna
 yakka
+yakut
 yampa
 yappy
 yarak

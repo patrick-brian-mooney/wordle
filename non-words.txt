@@ -32,6 +32,7 @@ acoin
 acoma
 acone
 acrab
+acroa
 adaga
 adagy
 adapa
@@ -61,6 +62,7 @@ agete
 aggie
 aggur
 aghan
+agnat
 agoho
 agrah
 agral
@@ -97,6 +99,7 @@ aldim
 alean
 algic
 algid
+algol
 alhet
 alice
 aliso
@@ -111,6 +114,8 @@ alpid
 altin
 aluta
 alvah
+alvan
+alvia
 amaga
 amala
 amalg
@@ -131,6 +136,7 @@ amire
 ammer
 amoke
 amphi
+amula
 amuze
 anabo
 anack
@@ -151,6 +157,7 @@ anlet
 annam
 annet
 annie
+anniv
 annot
 anoia
 anoil
@@ -169,6 +176,7 @@ aphra
 appar
 appet
 appmt
+aptal
 araby
 araca
 arace
@@ -299,14 +307,17 @@ bajau
 bakal
 bakie
 balak
+balat
 balza
 bamah
+banat
 banba
 banca
 banff
 banga
 bange
 barad
+barat
 barba
 barbu
 baret
@@ -315,6 +326,7 @@ bargh
 barid
 barie
 barih
+barit
 barse
 barth
 basat
@@ -323,6 +335,7 @@ basos
 bassa
 batad
 batak
+batan
 batea
 batel
 bater
@@ -524,6 +537,7 @@ cacur
 cadua
 caffa
 caggy
+cagit
 cahiz
 cahot
 cahuy
@@ -551,6 +565,7 @@ caque
 carga
 carid
 carlo
+caroa
 carot
 carty
 carua
@@ -558,9 +573,11 @@ carya
 casal
 casse
 cassy
+catan
 catel
 catha
 cathy
+catti
 catur
 cauch
 cauma
@@ -666,6 +683,7 @@ cordy
 corge
 corin
 corke
+coroa
 corol
 corpl
 corta
@@ -686,6 +704,7 @@ craik
 crain
 crang
 crany
+crcao
 creat
 creem
 creen
@@ -969,6 +988,7 @@ eyrar
 eyren
 eyrer
 eyrir
+facit
 fadme
 faham
 falla
@@ -1072,6 +1092,7 @@ furud
 furyl
 fusus
 gagee
+gagor
 gaine
 gaize
 galah
@@ -1084,12 +1105,14 @@ ganam
 ganga
 gange
 gansa
+ganta
 ganza
 garad
 garau
 garce
 gareh
 garle
+garoo
 garse
 garua
 gasan
@@ -1165,6 +1188,7 @@ goran
 gorce
 gorer
 goric
+gorra
 gossy
 goter
 gotha
@@ -1423,9 +1447,11 @@ jalet
 jaman
 jamie
 janua
+japyx
 jarmo
 jarra
 jarry
+jatki
 javan
 jawab
 jazey
@@ -1529,6 +1555,7 @@ kevyn
 khmer
 kiaat
 kieye
+kikar
 kikki
 kilah
 kileh
@@ -1562,9 +1589,11 @@ kodro
 koeri
 kohua
 kokan
+kokia
 kokio
 kokos
 kolis
+konak
 kongo
 kongu
 kooka
@@ -1616,6 +1645,7 @@ lamba
 lamel
 lamin
 lamus
+lanaz
 lango
 lansa
 lapps
@@ -1693,6 +1723,7 @@ loeil
 logis
 lohar
 loiel
+lokao
 loket
 loope
 lored
@@ -1766,11 +1797,13 @@ marsi
 martu
 marty
 masai
+matar
 matax
 matha
 matie
 matka
 matta
+matti
 maugh
 mayey
 mbaya
@@ -1881,6 +1914,7 @@ namaz
 nambe
 nammo
 nanga
+nanmu
 nantz
 naomi
 naoto
@@ -1964,6 +1998,7 @@ oncia
 oncin
 onker
 onkos
+oolak
 oolly
 oopod
 oozoa
@@ -2003,12 +2038,15 @@ paauw
 pacht
 pahmi
 paine
+pairt
 palau
 palch
 palma
+palta
 pamhy
 panak
 panse
+paola
 papio
 papua
 papyr
@@ -2088,6 +2126,7 @@ pompa
 pondo
 pongo
 ponos
+popal
 popie
 pople
 poret
@@ -2142,10 +2181,13 @@ raghu
 rahul
 raiae
 rajab
+rakan
+rakit
 rambo
 ramta
 ranli
 ratwa
+rayat
 rebeg
 rebob
 rebox
@@ -2500,12 +2542,14 @@ sysin
 tabet
 tabut
 tacca
+tagal
 tahar
 tahil
 tahin
 tahua
 taich
 taino
+taipi
 tairn
 taise
 takao
@@ -2515,12 +2559,18 @@ talis
 talma
 tambo
 tampa
+tanak
 tanan
 tanha
+tanny
 tanoa
+tanya
+tapia
+tapit
 tapoa
 taqua
 taraf
+tarau
 tarea
 tarfa
 tarie
@@ -2581,6 +2631,7 @@ tibby
 tiber
 tibet
 tibey
+ticca
 ticer
 ticul
 tiens
@@ -2781,6 +2832,7 @@ valva
 valyl
 vance
 vappa
+vatic
 vedet
 vedro
 vefry
@@ -2818,6 +2870,7 @@ waapa
 wabby
 wadna
 waefu
+wafty
 waggy
 waird
 waise
@@ -2928,6 +2981,7 @@ ytter
 yukon
 yurak
 yuruk
+zabti
 zakah
 zaman
 zapas
